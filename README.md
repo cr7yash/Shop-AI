@@ -16,17 +16,17 @@ A modern, intelligent e-commerce platform built with Next.js, FastAPI, and AI te
 
 ### Backend (FastAPI + Python)
 - **RESTful API**: Clean, well-documented API endpoints
-- **Authentication**: JWT-based authentication system
+- **Authentication**: JWT-based authentication system with password change
 - **Database**: SQLAlchemy ORM with PostgreSQL/SQLite support
-- **RAG Search**: Vector-based product search using ChromaDB
-- **LLM Integration**: OpenAI GPT integration for chat assistance
-- **Email Notifications**: Order confirmation emails
+- **Vector Search**: Pinecone-powered semantic product search
+- **LLM Integration**: Groq API integration for AI chat assistance
+- **User Features**: Profile management, orders, wishlist tracking
 - **Security**: Password hashing, CORS protection, input validation
 
 ### AI Features
-- **RAG Search**: Semantic product search using sentence transformers
-- **LLM Chat**: GPT-powered shopping assistant
-- **Product Recommendations**: AI-driven product suggestions
+- **Vector Search**: Semantic product search using Pinecone embeddings
+- **LLM Chat**: Groq-powered shopping assistant with intelligent responses
+- **Product Discovery**: AI-enhanced search and recommendations
 - **Natural Language Processing**: Understand user queries in natural language
 
 ## 🛠️ Tech Stack
@@ -46,9 +46,9 @@ A modern, intelligent e-commerce platform built with Next.js, FastAPI, and AI te
 - **Language**: Python 3.11+
 - **Database**: SQLAlchemy ORM
 - **Authentication**: JWT with python-jose
-- **AI/ML**: OpenAI API, LangChain, ChromaDB, Sentence Transformers
-- **Email**: SMTP with python-multipart
+- **AI/ML**: Groq API, Pinecone, LangChain, Sentence Transformers
 - **Security**: Passlib for password hashing
+- **Task Management**: APScheduler for background tasks
 
 ## 📦 Installation & Setup
 
@@ -56,12 +56,14 @@ A modern, intelligent e-commerce platform built with Next.js, FastAPI, and AI te
 - Node.js 18+ and npm
 - Python 3.11+
 - PostgreSQL (optional, SQLite works for development)
+- Groq API Key (for AI features)
+- Pinecone API Key (for vector storage)
 
 ### Frontend Setup
 
 1. **Navigate to the frontend directory**:
    ```bash
-   cd ecommerce-app
+   cd client
    ```
 
 2. **Install dependencies**:
@@ -70,7 +72,7 @@ A modern, intelligent e-commerce platform built with Next.js, FastAPI, and AI te
    ```
 
 3. **Set up environment variables**:
-   Create a `.env.local` file in the `ecommerce-app` directory:
+   Create a `.env.local` file in the `client` directory:
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:8000
    ```
@@ -110,14 +112,13 @@ The frontend will be available at `http://localhost:3000`
    SECRET_KEY=your-super-secret-key-change-this-in-production
    ACCESS_TOKEN_EXPIRE_MINUTES=30
    
-   # OpenAI API
-   OPENAI_API_KEY=your-openai-api-key-here
+   # Groq API
+   GROQ_API_KEY=your-groq-api-key-here
    
-   # Email Configuration
-   SMTP_SERVER=smtp.gmail.com
-   SMTP_PORT=587
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASSWORD=your-app-password
+   # Pinecone Configuration
+   PINECONE_API_KEY=your-pinecone-api-key-here
+   PINECONE_ENV=your-pinecone-environment
+   PINECONE_INDEX_NAME=shop-ai-index
    ```
 
 5. **Run the backend server**:
@@ -129,29 +130,39 @@ The backend API will be available at `http://localhost:8000`
 
 ## 🚀 Getting Started
 
-1. **Start both servers**:
-   - Backend: `cd backend && python main.py`
-   - Frontend: `cd ecommerce-app && npm run dev`
+1. **Start the backend server**:
+   ```bash
+   cd backend
+   python main.py
+   ```
 
-2. **Open your browser** and navigate to `http://localhost:3000`
+2. **In a new terminal, start the frontend**:
+   ```bash
+   cd client
+   npm run dev
+   ```
 
-3. **Explore the features**:
+3. **Open your browser** and navigate to `http://localhost:3000`
+
+4. **Explore the features**:
    - Browse products on the homepage
    - Try the AI search functionality
-   - Chat with the AI assistant
+   - Chat with the AI shopping assistant
    - Add items to cart and checkout
+   - Manage your profile and orders
+   - Add items to wishlist
    - Switch between dark and light modes
 
 ## 🔧 Configuration
 
-### OpenAI API Setup
-1. Get an API key from [OpenAI](https://platform.openai.com/api-keys)
-2. Add it to your backend `.env` file as `OPENAI_API_KEY`
+### Groq API Setup
+1. Get an API key from [Groq](https://console.groq.com)
+2. Add it to your backend `.env` file as `GROQ_API_KEY`
 
-### Email Configuration
-For email notifications, configure SMTP settings in the backend `.env` file:
-- Gmail: Use app passwords for authentication
-- Other providers: Update SMTP server and port accordingly
+### Pinecone Configuration
+1. Create an account at [Pinecone](https://www.pinecone.io/)
+2. Create an index for embeddings
+3. Add your API key and environment to backend `.env` file
 
 ### Database Configuration
 - **Development**: SQLite (default, no setup required)
@@ -160,21 +171,25 @@ For email notifications, configure SMTP settings in the backend `.env` file:
 ## 📁 Project Structure
 
 ```
-├── ecommerce-app/                 # Next.js frontend
+├── client/                        # Next.js frontend
 │   ├── src/
 │   │   ├── app/                  # App router pages
 │   │   ├── components/           # React components
-│   │   ├── contexts/            # React contexts
-│   │   └── lib/                 # Utilities and API client
-│   └── public/                  # Static assets
-├── backend/                      # FastAPI backend
-│   ├── main.py                  # FastAPI application
-│   ├── models.py                # Database models
-│   ├── schemas.py               # Pydantic schemas
-│   ├── auth.py                  # Authentication logic
-│   ├── services.py              # Business logic
-│   └── database.py              # Database configuration
-└── README.md                    # This file
+│   │   ├── contexts/             # React contexts
+│   │   └── lib/                  # Utilities and API client
+│   └── public/                   # Static assets
+├── backend/                       # FastAPI backend
+│   ├── main.py                   # FastAPI application
+│   ├── models.py                 # SQLAlchemy models
+│   ├── schemas.py                # Pydantic schemas
+│   ├── auth.py                   # Authentication logic
+│   ├── services.py               # Business logic
+│   ├── groq_service.py           # Groq AI integration
+│   ├── pinecone_service.py       # Vector store integration
+│   └── database.py               # Database configuration
+├── start-dev.sh                  # Development startup script
+├── FEATURES.md                   # Feature documentation
+└── README.md                     # This file
 ```
 
 ## 🎨 Customization
@@ -227,14 +242,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [shadcn/ui](https://ui.shadcn.com/) for beautiful components
 - [Framer Motion](https://www.framer.com/motion/) for animations
 - [FastAPI](https://fastapi.tiangolo.com/) for the backend framework
-- [OpenAI](https://openai.com/) for AI capabilities
-- [ChromaDB](https://www.trychroma.com/) for vector storage
-
-## 📞 Support
-
-If you encounter any issues or have questions:
-1. Check the documentation
-2. Search existing issues
-3. Create a new issue with detailed information
-
+- [Groq](https://groq.com/) for fast LLM inference
+- [Pinecone](https://www.pinecone.io/) for vector storage and search
+- [LangChain](https://www.langchain.com/) for LLM integration
 ---
