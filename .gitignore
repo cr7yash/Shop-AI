@@ -1,0 +1,27 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.example
+
+# Misc
+*.bak
+*.tmp
+.~*
