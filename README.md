@@ -225,18 +225,6 @@ The backend API will be available at `http://localhost:8000`
 - Use managed PostgreSQL (Supabase, PlanetScale, etc.)
 - Update `DATABASE_URL` in production environment
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 🙏 Acknowledgments
 
 - [shadcn/ui](https://ui.shadcn.com/) for beautiful components
@@ -244,5 +232,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [FastAPI](https://fastapi.tiangolo.com/) for the backend framework
 - [Groq](https://groq.com/) for fast LLM inference
 - [Pinecone](https://www.pinecone.io/) for vector storage and search
-- [LangChain](https://www.langchain.com/) for LLM integration
----
